@@ -7,6 +7,7 @@
 
 import UIKit
 
+/** For html */
 public extension String {
     var htmlToAttributedString: NSAttributedString? {
         guard let data = data(using: .utf8) else { return NSAttributedString() }
@@ -20,10 +21,13 @@ public extension String {
         return htmlToAttributedString?.string ?? ""
     }
     
-    func getUTF8String() -> String {
+    var toUTF8:String {
         return String(describing: self.cString(using: String.Encoding.utf8))
     }
-    
+}
+
+/** For text size */
+public extension String {
     func height(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
@@ -37,34 +41,11 @@ public extension String {
         
         return ceil(boundingBox.width)
     }
-    
-    func toDate(dateFormat:String = "yyyy/MM/dd HH:mm:ss") -> Date {
-        let format = DateFormatter()
-        format.locale = .current
-        format.dateFormat = dateFormat
-        let date = format.date(from: self)
-        return date!
-    }
-    
-    func urlEncoded() -> String {
-        var chatSet = CharacterSet.urlQueryAllowed
-        chatSet.remove(charactersIn: "=")
-        let encodeUrlString = self.addingPercentEncoding(withAllowedCharacters: chatSet)
-        return encodeUrlString ?? ""
-    }
-    
-    func urlDecoded() -> String {
-        return self.removingPercentEncoding ?? ""
-    }
-    
-    func localized() -> String {
-        let str = NSLocalizedString(self, comment: "")
-        if str.count > 0 {
-            return str
-        }
-        return self
-    }
-    
+}
+
+
+/** For Date */
+public extension String {
     func utcToLocal(dateFormat:String = "yyyy-MM-dd'T'HH:mm:ss.SSS+0000") -> String? {
         let utcFormatter = DateFormatter()
         utcFormatter.dateFormat = dateFormat
@@ -108,5 +89,38 @@ public extension String {
         df.calendar = Calendar(identifier: .republicOfChina)
         let date = df.date(from: self)
         return date!
+    }
+    
+    func toDate(dateFormat:String = "yyyy/MM/dd HH:mm:ss") -> Date {
+        let format = DateFormatter()
+        format.locale = .current
+        format.dateFormat = dateFormat
+        let date = format.date(from: self)
+        return date!
+    }
+}
+
+/** For codable */
+public extension String {
+    func urlEncoded() -> String {
+        var chatSet = CharacterSet.urlQueryAllowed
+        chatSet.remove(charactersIn: "=")
+        let encodeUrlString = self.addingPercentEncoding(withAllowedCharacters: chatSet)
+        return encodeUrlString ?? ""
+    }
+    
+    func urlDecoded() -> String {
+        return self.removingPercentEncoding ?? ""
+    }
+}
+
+/** For String table */
+public extension String {
+    func localized() -> String {
+        let str = NSLocalizedString(self, comment: "")
+        if str.count > 0 {
+            return str
+        }
+        return self
     }
 }
