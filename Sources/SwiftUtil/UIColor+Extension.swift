@@ -18,4 +18,15 @@ public extension UIColor {
         let newColor = UIColor(red: num, green: num2, blue: num3, alpha: 1)
         return newColor
     }
+    
+    func toImage(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        let rect = CGRect(origin: .zero, size: size)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        context.setFillColor(self.cgColor)
+        context.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
 }
